@@ -4,11 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tochkatest.domain.interactors.AuthInteractor
 import com.example.tochkatest.domain.models.AccountDomainModel
+import com.example.tochkatest.presentation.utils.rx.SchedulerProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class AuthViewModel(private val interactor: AuthInteractor) : ViewModel() {
+class AuthViewModel(
+    private val schedulerProvider: SchedulerProvider,
+    private val interactor: AuthInteractor
+) : ViewModel() {
     val authState = MutableLiveData<AuthState>()
     private val compositeDisposable = CompositeDisposable()
 
@@ -28,8 +32,8 @@ class AuthViewModel(private val interactor: AuthInteractor) : ViewModel() {
         val model = AccountDomainModel(name, email, photoUri)
 
         val disposable = interactor.saveAccountInfo(model)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
             .subscribe({
                 authState.value = AuthState.Authorized
             }, {
@@ -43,8 +47,8 @@ class AuthViewModel(private val interactor: AuthInteractor) : ViewModel() {
     // Если информации нет - не авторизирован, информация есть - авторизирован
     private fun checkingUserAuthorization() {
         val disposable = interactor.getAccountInfo()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
             .subscribe({
                 if (it.name == null && it.email == null && it.photoUri == null) {
                     authState.value = AuthState.NotAuthorized

@@ -4,11 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tochkatest.domain.interactors.NavigationInteractor
 import com.example.tochkatest.domain.models.AccountDomainModel
+import com.example.tochkatest.presentation.utils.rx.SchedulerProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class NavigationViewModel(private val interactor: NavigationInteractor) : ViewModel() {
+class NavigationViewModel(
+    private val schedulerProvider: SchedulerProvider,
+    private val interactor: NavigationInteractor
+) : ViewModel() {
     val accountInfo = MutableLiveData<AccountInfo>() // Модель с информацией об аккаунте
     private val compositeDisposable = CompositeDisposable()
 
@@ -27,8 +31,8 @@ class NavigationViewModel(private val interactor: NavigationInteractor) : ViewMo
     // Загружает информацию об аккаунте авторизовавшегося пользователя
     private fun loadAccountInfo() {
         val disposable = interactor.getAccountInfo()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
             .subscribe({
                 accountInfo.value = AccountInfo.Result(it)
             }, {

@@ -7,6 +7,8 @@ import com.example.tochkatest.data.repositories.AccountRepositoryImpl
 import com.example.tochkatest.data.repositories.UserRepositoryImpl
 import com.example.tochkatest.domain.repositories.AccountRepository
 import com.example.tochkatest.domain.repositories.UserRepository
+import com.example.tochkatest.presentation.utils.rx.SchedulerProvider
+import com.example.tochkatest.presentation.utils.rx.SchedulerProviderImpl
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -57,5 +59,11 @@ class AppModule(private val context: Context) {
     @Singleton
     fun provideSharedPreferences(): SharedPreferences {
         return context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSchedulerProvider(): SchedulerProvider {
+        return SchedulerProviderImpl()
     }
 }

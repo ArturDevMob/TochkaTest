@@ -5,6 +5,7 @@ import com.example.tochkatest.domain.interactors.NavigationInteractor
 import com.example.tochkatest.domain.repositories.AccountRepository
 import com.example.tochkatest.presentation.fragments.NavigationFragment
 import com.example.tochkatest.presentation.utils.ModelFactory
+import com.example.tochkatest.presentation.utils.rx.SchedulerProvider
 import com.example.tochkatest.presentation.viewmodels.NavigationViewModel
 import dagger.Module
 import dagger.Provides
@@ -19,8 +20,14 @@ class NavigationModule(private val fragmentOwner: NavigationFragment) {
 
     @Provides
     @NavigationScope
-    fun provideNavigationViewModel(navigationInteractor: NavigationInteractor): NavigationViewModel {
-        return ViewModelProvider(fragmentOwner, ModelFactory(navigationInteractor)).get(
+    fun provideNavigationViewModel(
+        schedulerProvider: SchedulerProvider,
+        navigationInteractor: NavigationInteractor
+    ): NavigationViewModel {
+        return ViewModelProvider(
+            fragmentOwner,
+            ModelFactory(schedulerProvider, navigationInteractor)
+        ).get(
             NavigationViewModel::class.java
         )
     }

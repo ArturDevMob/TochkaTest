@@ -4,13 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tochkatest.domain.interactors.SearchUsersInteractor
 import com.example.tochkatest.domain.models.UserDomainModel
+import com.example.tochkatest.presentation.utils.rx.SchedulerProvider
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class SearchUsersViewModel(private val interactor: SearchUsersInteractor) : ViewModel() {
+class SearchUsersViewModel(
+    private val schedulerProvider: SchedulerProvider,
+    private val interactor: SearchUsersInteractor
+) : ViewModel() {
     val usersSearch = MutableLiveData<SearchUsers>() // Модель с пользователями
     var lastQuery = MutableLiveData<String>() // Поисковой запрос, чтобы пережить поворот
     var lastPage = MutableLiveData<Int>() // Номер текущей страницы, чтобы пережить поворот
@@ -35,8 +39,8 @@ class SearchUsersViewModel(private val interactor: SearchUsersInteractor) : View
                 lastQuery.postValue(it)
             }
             .flatMapSingle { interactor.getUsersFromQuery(it, 1) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
             .subscribe({
                 if (it.isNotEmpty()) {
                     usersSearch.value = SearchUsers.Result(it)
@@ -68,8 +72,8 @@ class SearchUsersViewModel(private val interactor: SearchUsersInteractor) : View
                 oldList.addAll(it)
                 oldList
             }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
             .subscribe({
                 if (it.isNotEmpty()) {
                     usersSearch.value = SearchUsers.Result(it)

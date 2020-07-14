@@ -6,6 +6,7 @@ import com.example.tochkatest.domain.repositories.UserRepository
 import com.example.tochkatest.presentation.adapters.UsersAdapters
 import com.example.tochkatest.presentation.fragments.SearchUsersFragment
 import com.example.tochkatest.presentation.utils.ModelFactory
+import com.example.tochkatest.presentation.utils.rx.SchedulerProvider
 import com.example.tochkatest.presentation.viewmodels.SearchUsersViewModel
 import dagger.Module
 import dagger.Provides
@@ -20,10 +21,13 @@ class SearchUsersModule(private val fragmentOwner: SearchUsersFragment) {
 
     @Provides
     @SearchUsersScope
-    fun provideSearchUsersViewModel(interactor: SearchUsersInteractor): SearchUsersViewModel {
+    fun provideSearchUsersViewModel(
+        schedulerProvider: SchedulerProvider,
+        interactor: SearchUsersInteractor
+    ): SearchUsersViewModel {
         return ViewModelProvider(
             fragmentOwner,
-            ModelFactory(interactor)
+            ModelFactory(schedulerProvider, interactor)
         ).get(SearchUsersViewModel::class.java)
     }
 
