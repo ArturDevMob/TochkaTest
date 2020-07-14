@@ -1,0 +1,22 @@
+<resources>
+    <string name="server_client_id">1081104620912-msthec6istenmt9i9to57sb0kppscnk9.apps.googleusercontent.com</string>
+    <string name="app_name">TochkaTest</string>
+    <string name="title_auth_fragment">Авторизация</string>
+    <string name="title_search_users_fragment">Пользователи GitHub</string>
+    <string name="title_logout_fragment">Выход из аккаунта</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_exit">Выйти</string>
+    <string name="search_query_hint">Начните вводить имя пользователя</string>
+    <string name="message_empty_search_users">Список с пользователями пуст</string>
+    <string name="search_users">Поиск пользователей</string>
+    <string name="adapter_user_name">Логин: %1$s</string>
+    <string name="adapter_user_id">ID: %1$d</string>
+    <string name="login_not_done">Вход не выполнен</string>
+    <string name="sign_in">Пройдите авторизацию</string>
+    <string name="account_info_no_name">Имя не указано</string>
+    <string name="account_info_no_email">Email не указан</string>
+</resources>
