@@ -1,6 +1,5 @@
 package com.example.tochkatest.presentation.fragments
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
@@ -8,19 +7,19 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tochkatest.R
+import com.example.tochkatest.di.navigation.NavigationModule
+import com.example.tochkatest.di.searchusers.SearchUsersComponent
 import com.example.tochkatest.di.searchusers.SearchUsersModule
-import com.example.tochkatest.domain.models.AccountDomainModel
 import com.example.tochkatest.domain.models.UserDomainModel
 import com.example.tochkatest.presentation.App
 import com.example.tochkatest.presentation.adapters.UsersAdapters
 import com.example.tochkatest.presentation.utils.RxSearch
 import com.example.tochkatest.presentation.viewmodels.SearchUsersViewModel
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_search_users.*
-import kotlinx.android.synthetic.main.nav_header_main.view.*
 import javax.inject.Inject
 
-class SearchUsersFragment : BaseFragment() {
+class SearchUsersFragment : NavigationFragment() {
+    private var component: SearchUsersComponent? = null
     @Inject
     lateinit var viewModel: SearchUsersViewModel
     @Inject
@@ -33,6 +32,12 @@ class SearchUsersFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_search_users, container, false)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        component = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -55,22 +60,18 @@ class SearchUsersFragment : BaseFragment() {
     }
 
     override fun setDi() {
-        App.appComponent
-            .createSearchUsersComponent(SearchUsersModule(this))
-            .inject(this)
-    }
+        super.setDi()
 
-    override fun setToolbar() {
-        getSingleActivity().drawerLayout.setDrawerLockMode(
-            DrawerLayout.LOCK_MODE_UNLOCKED
-        )
+        component = App.appComponent
+            .createNavigationComponent(NavigationModule(this))
+            .createSearchUsersComponent(SearchUsersModule(this))
+        component?.inject(this)
     }
 
     override fun setViewModel() {
-        viewModel.init()
+        super.setViewModel()
 
         setUserSearchObserver()
-        setAccountInfoObserver()
         setLastPageObserver()
     }
 
@@ -91,22 +92,6 @@ class SearchUsersFragment : BaseFragment() {
                 }
                 is SearchUsersViewModel.SearchUsers.Loading -> {
                     showLoading()
-                }
-            }
-        })
-    }
-
-    // Устанавливает наблюдателя за информацией об авторизовавшимся пользователе
-    private fun setAccountInfoObserver() {
-        viewModel.accountInfo.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is SearchUsersViewModel.AccountInfo.Result -> {
-                    updateUiNavigationDrawer(it.data)
-                }
-                is SearchUsersViewModel.AccountInfo.Error -> {
-                    it.message?.let { message ->
-                        showMessage(message)
-                    }
                 }
             }
         })
@@ -134,23 +119,6 @@ class SearchUsersFragment : BaseFragment() {
 
         searchView.setOnSearchClickListener {
             viewModel.loadUsersFromQuery(flowableQuery)
-        }
-    }
-
-    // Обновляет боковую панель информацией об аккаунте авторизовавшегося пользователя
-    private fun updateUiNavigationDrawer(account: AccountDomainModel) {
-        val navigationView = getSingleActivity().navigationView.getHeaderView(0)
-
-        with(navigationView) {
-            user_login_text.text =
-                account.name ?: resources.getString(R.string.account_info_no_name)
-            user_email_text.text =
-                account.email ?: resources.getString(R.string.account_info_no_email)
-
-            Picasso.get()
-                .load(Uri.parse(account.photoUri))
-                .error(R.drawable.ic_no_avatar)
-                .into(user_avatar_image)
         }
     }
 

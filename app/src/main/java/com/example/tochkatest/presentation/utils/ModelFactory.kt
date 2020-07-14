@@ -2,12 +2,10 @@ package com.example.tochkatest.presentation.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.tochkatest.domain.interactors.AuthInteractor
-import com.example.tochkatest.domain.interactors.BaseInteractor
-import com.example.tochkatest.domain.interactors.LogoutInteractor
-import com.example.tochkatest.domain.interactors.SearchUsersInteractor
+import com.example.tochkatest.domain.interactors.*
 import com.example.tochkatest.presentation.viewmodels.AuthViewModel
 import com.example.tochkatest.presentation.viewmodels.LogoutViewModel
+import com.example.tochkatest.presentation.viewmodels.NavigationViewModel
 import com.example.tochkatest.presentation.viewmodels.SearchUsersViewModel
 
 class ModelFactory(private val interactor: BaseInteractor) :
@@ -22,6 +20,9 @@ class ModelFactory(private val interactor: BaseInteractor) :
             }
             modelClass.isAssignableFrom(LogoutViewModel::class.java) -> {
                 LogoutViewModel(interactor as LogoutInteractor) as T
+            }
+            modelClass.isAssignableFrom(NavigationViewModel::class.java) -> {
+                NavigationViewModel(interactor as NavigationInteractor) as T
             }
             else -> {
                 throw IllegalArgumentException("Неизвестный класс модели: ${modelClass.name}")

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import com.example.tochkatest.R
+import com.example.tochkatest.di.auth.AuthComponent
 import com.example.tochkatest.di.auth.AuthModule
 import com.example.tochkatest.presentation.App
 import com.example.tochkatest.presentation.viewmodels.AuthViewModel
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_auth.*
 import javax.inject.Inject
 
 class AuthFragment : BaseFragment() {
+    private var component: AuthComponent? = null
     @Inject
     lateinit var viewModel: AuthViewModel
     lateinit var googleSignInOptions: GoogleSignInOptions
@@ -34,6 +36,11 @@ class AuthFragment : BaseFragment() {
 
         googleApiClient.stopAutoManage(getSingleActivity());
         googleApiClient.disconnect();
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        component = null
     }
 
     override fun onCreateView(
@@ -72,9 +79,9 @@ class AuthFragment : BaseFragment() {
     }
 
     override fun setDi() {
-        App.appComponent
+        component = App.appComponent
             .createAuthComponent(AuthModule(this))
-            .inject(this)
+        component?.inject(this)
     }
 
     override fun setToolbar() {

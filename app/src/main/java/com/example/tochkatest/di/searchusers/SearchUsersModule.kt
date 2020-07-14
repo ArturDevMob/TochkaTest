@@ -2,7 +2,6 @@ package com.example.tochkatest.di.searchusers
 
 import androidx.lifecycle.ViewModelProvider
 import com.example.tochkatest.domain.interactors.SearchUsersInteractor
-import com.example.tochkatest.domain.repositories.AccountRepository
 import com.example.tochkatest.domain.repositories.UserRepository
 import com.example.tochkatest.presentation.adapters.UsersAdapters
 import com.example.tochkatest.presentation.fragments.SearchUsersFragment
@@ -15,11 +14,8 @@ import dagger.Provides
 class SearchUsersModule(private val fragmentOwner: SearchUsersFragment) {
     @Provides
     @SearchUsersScope
-    fun provideSearchUsersInteractor(
-        userRepository: UserRepository,
-        accountRepository: AccountRepository
-    ): SearchUsersInteractor {
-        return SearchUsersInteractor(userRepository, accountRepository)
+    fun provideSearchUsersInteractor(userRepository: UserRepository): SearchUsersInteractor {
+        return SearchUsersInteractor(userRepository)
     }
 
     @Provides

@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.example.tochkatest.R
+import com.example.tochkatest.di.logout.LogoutComponent
 import com.example.tochkatest.di.logout.LogoutModule
 import com.example.tochkatest.presentation.App
 import com.example.tochkatest.presentation.viewmodels.LogoutViewModel
-import kotlinx.android.synthetic.main.fragment_search_users.*
 import javax.inject.Inject
 
-class LogoutFragment() : BaseFragment() {
+class LogoutFragment : BaseFragment() {
+    private var component: LogoutComponent? = null
     @Inject
     lateinit var viewModel: LogoutViewModel
 
@@ -24,10 +25,15 @@ class LogoutFragment() : BaseFragment() {
         return inflater.inflate(R.layout.fragment_logout, container, false)
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        component = null
+    }
+
     override fun setDi() {
-        App.appComponent
+        component = App.appComponent
             .createLogoutComponent(LogoutModule(this))
-            .inject(this)
+        component?.inject(this)
     }
 
     override fun setToolbar() {

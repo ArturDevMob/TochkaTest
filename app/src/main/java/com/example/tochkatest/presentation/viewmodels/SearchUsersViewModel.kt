@@ -3,7 +3,6 @@ package com.example.tochkatest.presentation.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tochkatest.domain.interactors.SearchUsersInteractor
-import com.example.tochkatest.domain.models.AccountDomainModel
 import com.example.tochkatest.domain.models.UserDomainModel
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,7 +12,6 @@ import io.reactivex.schedulers.Schedulers
 
 class SearchUsersViewModel(private val interactor: SearchUsersInteractor) : ViewModel() {
     val usersSearch = MutableLiveData<SearchUsers>() // Модель с пользователями
-    val accountInfo = MutableLiveData<AccountInfo>() // Модель с информацией об аккаунте
     var lastQuery = MutableLiveData<String>() // Поисковой запрос, чтобы пережить поворот
     var lastPage = MutableLiveData<Int>() // Номер текущей страницы, чтобы пережить поворот
     private lateinit var usersFromQuery: Disposable
@@ -24,12 +22,6 @@ class SearchUsersViewModel(private val interactor: SearchUsersInteractor) : View
         super.onCleared()
 
         compositeDisposable.clear()
-    }
-
-    fun init() {
-        if (accountInfo.value == null) {
-            loadAccountInfo()
-        }
     }
 
     // Первая загрузка пользователей по поисковому запросу
@@ -89,20 +81,6 @@ class SearchUsersViewModel(private val interactor: SearchUsersInteractor) : View
         compositeDisposable.add(nextUsersFromQuery)
     }
 
-    // Загружает информацию об аккаунте авторизовавшегося пользователя
-    private fun loadAccountInfo() {
-        val disposable = interactor.getAccountInfo()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                accountInfo.value = AccountInfo.Result(it)
-            }, {
-                accountInfo.value = AccountInfo.Error(it.message, it)
-            })
-
-        compositeDisposable.add(disposable)
-    }
-
     // Очищает подписку на предыдущий поток
     // Иначе подписки будут накапливаться
     private fun clearUsersFromQueryDisposable() {
@@ -123,10 +101,5 @@ class SearchUsersViewModel(private val interactor: SearchUsersInteractor) : View
         class Error(val message: String?, val throwable: Throwable) : SearchUsers()
         object Empty : SearchUsers()
         object Loading : SearchUsers()
-    }
-
-    sealed class AccountInfo {
-        class Result(val data: AccountDomainModel) : AccountInfo()
-        class Error(val message: String?, val throwable: Throwable) : AccountInfo()
     }
 }
