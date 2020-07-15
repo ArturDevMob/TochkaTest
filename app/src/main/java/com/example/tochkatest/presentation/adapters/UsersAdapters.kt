@@ -16,13 +16,7 @@ import kotlinx.android.synthetic.main.item_search_user.view.*
 class UsersAdapters : RecyclerView.Adapter<UsersAdapters.ViewHolder>() {
     var currentPage = 1 // Текущая страница
     lateinit var callback: Callback
-    var users = mutableListOf<UserDomainModel>()
-        set(value) {
-            //TODO("Неэффективное обновление списка, позже переделать")
-            users.clear()
-            users.addAll(value)
-            notifyDataSetChanged()
-        }
+    var users = listOf<UserDomainModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

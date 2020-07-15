@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tochkatest.R
 import com.example.tochkatest.di.navigation.NavigationModule
@@ -13,14 +14,22 @@ import com.example.tochkatest.domain.models.UserDomainModel
 import com.example.tochkatest.presentation.App
 import com.example.tochkatest.presentation.adapters.UsersAdapters
 import com.example.tochkatest.presentation.utils.RxSearch
+import com.example.tochkatest.presentation.utils.UserDiffUtilCallback
 import com.example.tochkatest.presentation.viewmodels.SearchUsersViewModel
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_search_users.*
 import javax.inject.Inject
 
 class SearchUsersFragment : NavigationFragment() {
     private var component: SearchUsersComponent? = null
+    private var diffResultDisposable: Disposable? = null
+
     @Inject
     lateinit var viewModel: SearchUsersViewModel
+
     @Inject
     lateinit var usersAdapters: UsersAdapters
     lateinit var usersSearchView: SearchView
@@ -36,6 +45,7 @@ class SearchUsersFragment : NavigationFragment() {
     override fun onDetach() {
         super.onDetach()
 
+        diffResultDisposable?.dispose()
         component = null
     }
 
@@ -159,8 +169,8 @@ class SearchUsersFragment : NavigationFragment() {
     }
 
     private fun showSearchUsers(show: Boolean, users: List<UserDomainModel> = emptyList()) {
+        updateDataUserAdapter(users)
         search_users_recycler_view.visibility = if (show) View.VISIBLE else View.GONE
-        usersAdapters.users = users.toMutableList()
     }
 
     private fun showProgressbar(show: Boolean) {
@@ -169,5 +179,23 @@ class SearchUsersFragment : NavigationFragment() {
 
     private fun showMessageEmptySearchUsers(show: Boolean) {
         message_empty_search_users_text.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    // Обновление списка адаптера с пользователями через DiffUtil
+    // Работа DiffUtil помещена в фоновый поток, т.к. на больших списках могут появится тормоза
+    private fun updateDataUserAdapter(users: List<UserDomainModel>) {
+        val userDiffUtilCallback = UserDiffUtilCallback(usersAdapters.users, users)
+
+        diffResultDisposable?.dispose()
+
+        diffResultDisposable = Single.fromCallable { DiffUtil.calculateDiff(userDiffUtilCallback) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                it.dispatchUpdatesTo(usersAdapters)
+                usersAdapters.users = users
+            }, {
+                it.message?.let { message -> showMessage(message) }
+            })
     }
 }
