@@ -75,9 +75,7 @@ class SearchUsersViewModel(
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .subscribe({
-                if (it.isNotEmpty()) {
-                    usersSearch.value = SearchUsers.Result(it)
-                }
+                usersSearch.value = SearchUsers.Result(it)
             }, {
                 usersSearch.value = SearchUsers.Error(it.message, it)
             })
