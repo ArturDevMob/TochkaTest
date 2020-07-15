@@ -3,7 +3,6 @@ package com.example.tochkatest.data.network
 import com.example.tochkatest.data.models.UserListDataModel
 import io.reactivex.Single
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserApi {

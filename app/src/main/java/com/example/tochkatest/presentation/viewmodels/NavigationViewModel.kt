@@ -5,9 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.tochkatest.domain.interactors.NavigationInteractor
 import com.example.tochkatest.domain.models.AccountDomainModel
 import com.example.tochkatest.presentation.utils.rx.SchedulerProvider
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class NavigationViewModel(
     private val schedulerProvider: SchedulerProvider,

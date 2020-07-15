@@ -6,10 +6,8 @@ import com.example.tochkatest.domain.interactors.SearchUsersInteractor
 import com.example.tochkatest.domain.models.UserDomainModel
 import com.example.tochkatest.presentation.utils.rx.SchedulerProvider
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 class SearchUsersViewModel(
     private val schedulerProvider: SchedulerProvider,
