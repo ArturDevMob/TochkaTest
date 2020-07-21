@@ -1,5 +1,7 @@
 # Tochka Test - Тестовое задание
 
+<img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/1.png" width="210" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/2.png" width="210" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/3.png" width="210" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/4.png" width="210" />
+
 Напишите приложение:
 - авторизация через сервисы: Вк, Google, Facebook (на выбор)
 - после авторизации, необходимо отобразить профиль пользователя в левом меню(фото + имя/логин)
