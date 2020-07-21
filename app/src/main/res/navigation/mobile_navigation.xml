@@ -7,16 +7,16 @@
 
     <fragment
         android:id="@+id/nav_search_users"
-        android:name="com.example.tochkatest.presentation.fragments.SearchUsersFragment"
+        android:name="com.arturdevmob.tochka.presentation.fragments.SearchUsersFragment"
         android:label="@string/title_search_users_fragment"
         tools:layout="@layout/fragment_search_users"/>
     <fragment
         android:id="@+id/nav_auth"
-        android:name="com.example.tochkatest.presentation.fragments.AuthFragment"
+        android:name="com.arturdevmob.tochka.presentation.fragments.AuthFragment"
         android:label="@string/title_auth_fragment"
         tools:layout="@layout/fragment_auth" />
     <fragment
         android:id="@+id/nav_logout"
-        android:name="com.example.tochkatest.presentation.fragments.LogoutFragment"
+        android:name="com.arturdevmob.tochka.presentation.fragments.LogoutFragment"
         android:label="@string/title_logout_fragment"/>
 </navigation>

@@ -1,6 +1,5 @@
 <resources>
-    <string name="server_client_id">1081104620912-msthec6istenmt9i9to57sb0kppscnk9.apps.googleusercontent.com</string>
-    <string name="app_name">TochkaTest</string>
+    <string name="app_name">Tochka</string>
     <string name="title_auth_fragment">Авторизация</string>
     <string name="title_search_users_fragment">Пользователи GitHub</string>
     <string name="title_logout_fragment">Выход из аккаунта</string>
