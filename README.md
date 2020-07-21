@@ -1,6 +1,8 @@
 # Tochka Test - Тестовое задание
 
-<img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/1.png" width="210" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/2.png" width="210" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/3.png" width="210" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/4.png" width="210" />
+<img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/1.png" width="200" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/2.png" width="200" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/3.png" width="200" /> <img src="https://raw.githubusercontent.com/ArturDevMob/TochkaTest/master/resources/4.png" width="200" />
+
+Скачать релизную версию APK: https://github.com/ArturDevMob/TochkaTest/raw/master/resources/tochka-release.apk
 
 Напишите приложение:
 - авторизация через сервисы: Вк, Google, Facebook (на выбор)
