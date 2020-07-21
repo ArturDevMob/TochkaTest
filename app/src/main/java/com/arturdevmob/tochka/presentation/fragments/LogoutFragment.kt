@@ -51,6 +51,7 @@ class LogoutFragment : BaseFragment() {
         viewModel.logoutState.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is LogoutViewModel.LogoutState.Success -> {
+                    signOutAccountGoogle()
                     getSingleActivity().startAuthFragment()
                 }
                 is LogoutViewModel.LogoutState.Error -> {
@@ -60,5 +61,9 @@ class LogoutFragment : BaseFragment() {
                 }
             }
         })
+    }
+
+    private fun signOutAccountGoogle() {
+        googleSignInHelper.signOutAccountGoogle()
     }
 }

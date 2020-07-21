@@ -2,10 +2,13 @@ package com.arturdevmob.tochka.presentation.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.arturdevmob.tochka.presentation.App
 import com.arturdevmob.tochka.presentation.SingleActivity
+import com.arturdevmob.tochka.presentation.utils.GoogleSignInHelper
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment : Fragment() {
+    lateinit var googleSignInHelper: GoogleSignInHelper
     abstract fun setDi()
     abstract fun setToolbar()
     abstract fun setViewModel()
@@ -16,6 +19,20 @@ abstract class BaseFragment : Fragment() {
         setDi()
         setToolbar()
         setViewModel()
+
+        googleSignInHelper = App.appComponent.getGoogleSignInHelper()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        googleSignInHelper.disconnect()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        googleSignInHelper.connect()
     }
 
     protected fun getSingleActivity(): SingleActivity {

@@ -15,27 +15,17 @@ import com.arturdevmob.tochka.presentation.App
 import com.arturdevmob.tochka.presentation.viewmodels.AuthViewModel
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.GoogleApiClient
 import kotlinx.android.synthetic.main.fragment_auth.*
 import javax.inject.Inject
 
 class AuthFragment : BaseFragment() {
     private var component: AuthComponent? = null
+
     @Inject
     lateinit var viewModel: AuthViewModel
-    lateinit var googleSignInOptions: GoogleSignInOptions
-    lateinit var googleApiClient: GoogleApiClient
 
     companion object {
         const val SIGN_GOOGLE_REQUEST = 111
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        googleApiClient.stopAutoManage(getSingleActivity());
-        googleApiClient.disconnect();
     }
 
     override fun onDetach() {
@@ -53,8 +43,6 @@ class AuthFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        googleSignInit()
 
         sign_in_button.setOnClickListener {
             signInGoogle()
@@ -118,34 +106,9 @@ class AuthFragment : BaseFragment() {
 
     // Запуск авторизации через google
     private fun signInGoogle() {
-        val intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        val intent = googleSignInHelper.getIntent()
 
         startActivityForResult(intent, SIGN_GOOGLE_REQUEST)
-    }
-
-    // Иницилизация компонентов для авторизации
-    private fun googleSignInit() {
-        googleSignInOptions = createGoogleSignInOptions()
-        googleApiClient = createGoogleApiClient()
-    }
-
-    private fun createGoogleSignInOptions(): GoogleSignInOptions {
-        return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-    }
-
-    private fun createGoogleApiClient(): GoogleApiClient {
-        return GoogleApiClient.Builder(requireContext())
-            .enableAutoManage(getSingleActivity(), createOnConnectionFailedListener())
-            .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-            .build()
-    }
-
-    private fun createOnConnectionFailedListener(): GoogleApiClient.OnConnectionFailedListener {
-        return GoogleApiClient.OnConnectionFailedListener {
-            throw Exception("OnConnectionFailedListener Error")
-        }
     }
 
     // Сохранение информации об аккаунте, полученной после авторизации

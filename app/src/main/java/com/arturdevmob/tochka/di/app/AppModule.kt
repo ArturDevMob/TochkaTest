@@ -7,6 +7,7 @@ import com.arturdevmob.tochka.data.repositories.AccountRepositoryImpl
 import com.arturdevmob.tochka.data.repositories.UserRepositoryImpl
 import com.arturdevmob.tochka.domain.repositories.AccountRepository
 import com.arturdevmob.tochka.domain.repositories.UserRepository
+import com.arturdevmob.tochka.presentation.utils.GoogleSignInHelper
 import com.arturdevmob.tochka.presentation.utils.rx.SchedulerProvider
 import com.arturdevmob.tochka.presentation.utils.rx.SchedulerProviderImpl
 import dagger.Module
@@ -27,6 +28,13 @@ class AppModule(private val context: Context) {
     @Singleton
     fun provideContext(): Context {
         return context
+    }
+
+    @Provides
+    @Singleton
+
+    fun provideGoogleSignInHelper(): GoogleSignInHelper {
+        return GoogleSignInHelper(context)
     }
 
     @Provides

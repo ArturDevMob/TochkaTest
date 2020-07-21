@@ -6,6 +6,7 @@ import com.arturdevmob.tochka.di.logout.LogoutComponent
 import com.arturdevmob.tochka.di.logout.LogoutModule
 import com.arturdevmob.tochka.di.navigation.NavigationComponent
 import com.arturdevmob.tochka.di.navigation.NavigationModule
+import com.arturdevmob.tochka.presentation.utils.GoogleSignInHelper
 import dagger.Component
 import javax.inject.Singleton
 
@@ -15,4 +16,6 @@ interface AppComponent {
     fun createNavigationComponent(module: NavigationModule): NavigationComponent
     fun createAuthComponent(module: AuthModule): AuthComponent
     fun createLogoutComponent(module: LogoutModule): LogoutComponent
+
+    fun getGoogleSignInHelper(): GoogleSignInHelper
 }
